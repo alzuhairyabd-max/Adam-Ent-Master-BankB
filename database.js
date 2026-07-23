@@ -1,6 +1,6 @@
 
 window.ENTApp=window.ENTApp||{};
-ENTApp.db=(function(){
+window.ENTApp.db=(function(){
  const KEY='ent_questions';
  let questions=[];
  function loadQuestions(){try{questions=JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){questions=[]} return questions;}
@@ -19,4 +19,4 @@ ENTApp.db=(function(){
 })();
 
 // STEP53
-window.ENTApp=window.ENTApp||{};ENTApp.db=ENTApp.db||{};ENTApp.db.findQuestion=function(id){return (this.getQuestions?this.getQuestions():[]).find(q=>String(q.id)===String(id));};ENTApp.db.removeQuestion=function(id){let a=this.getQuestions?this.getQuestions():[];a=a.filter(q=>String(q.id)!==String(id));localStorage.setItem('ent_questions',JSON.stringify(a));document.dispatchEvent(new CustomEvent('questionsUpdated'));};
+window.ENTApp=window.ENTApp||{};window.ENTApp.db=window.ENTApp.db||{};window.ENTApp.db.findQuestion=function(id){return (this.getQuestions?this.getQuestions():[]).find(q=>String(q.id)===String(id));};window.ENTApp.db.removeQuestion=function(id){let a=this.getQuestions?this.getQuestions():[];a=a.filter(q=>String(q.id)!==String(id));localStorage.setItem('ent_questions',JSON.stringify(a));document.dispatchEvent(new CustomEvent('questionsUpdated'));};
