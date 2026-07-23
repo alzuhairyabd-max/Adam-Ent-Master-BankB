@@ -7,12 +7,12 @@ window.ENTApp.utils=window.ENTApp.utils||{};
 
 // STEP41 namespace bootstrap
 window.ENTApp=window.ENTApp||{};
-ENTApp.modules=ENTApp.modules||{};
-ENTApp.modules.app=ENTApp.modules.app||{};
+window.ENTApp.modules=window.ENTApp.modules||{};
+window.ENTApp.modules.app=window.ENTApp.modules.app||{};
 // Phase6 scaffold
 window.ENTApp=window.ENTApp||{};
-ENTApp.version='step36';
-ENTApp.utils=ENTApp.utils||{};
+window.ENTApp.version='step36';
+window.ENTApp.utils=window.ENTApp.utils||{};
 // Phase 5 bootstrap
 window.ENTApp = window.ENTApp || {};
 window.ENTApp.version='step35';
@@ -1777,6 +1777,15 @@ const topicOpts = '<option value="all">All</option>' + [...topicsSet].sort().map
             } catch (e) { showToast('Import error: ' + e.message, 'error'); }
         }
 
+        function validateImportedQuestionsStrict(questions) {
+            return Array.isArray(questions) && questions.every(q => {
+                if (!q || typeof q !== 'object') return false;
+                const hasQuestion = typeof q.questionText === 'string' && q.questionText.trim().length > 0;
+                const hasAnswer = typeof q.correctAnswer === 'string' && q.correctAnswer.trim().length > 0;
+                return hasQuestion && hasAnswer;
+            });
+        }
+
         function parseCSV(csv) {
             const lines = csv.trim().split('\n'); if (lines.length < 2) return [];
             const headers = lines[0].split(',').map(h => h.trim());
@@ -2120,7 +2129,7 @@ const importBtn = $('#btnImport'); if (importBtn) importBtn.addEventListener('cl
 
         window.executeClear = async function(type) {
             if (!confirm("Are you sure? This action cannot be undone.")) return;
-            const tx = db.db.transaction(['questions', 'examHistory', 'bookmarks', 'notes'], 'readwrite');
+            const tx = db.db.transaction(['questions', 'examHistory', 'bookmarks', 'notes', 'performance', 'highYield'], 'readwrite');
             if (type === 'questions') tx.objectStore('questions').clear();
             if (type === 'all') {
                 tx.objectStore('questions').clear();
@@ -2140,11 +2149,9 @@ const importBtn = $('#btnImport'); if (importBtn) importBtn.addEventListener('cl
         })();
         // ============================================================
         //  PASSWORD PROTECTION FOR SENSITIVE ACTIONS
+        //  Reuse the admin helper declared above so the script can parse
+        //  cleanly in browsers and static checks.
         // ============================================================
-        function checkAdminAccess() {
-            const password = prompt("Enter Administrator Password:");
-            return password === "adam2016"; // You can change adam2016 to your password
-        }
 
         // --- OVERRIDE IMPORT ---
         const originalImport = window.handleImport;
@@ -2339,33 +2346,33 @@ document.addEventListener('DOMContentLoaded',function(){
 
     
 // Phase40 exports
-ENTApp.quiz=ENTApp.quiz||{}; ENTApp.quiz.classifyQuestionAdvanced=classifyQuestionAdvanced;
-ENTApp.quiz=ENTApp.quiz||{}; ENTApp.quiz.getQuestionsNeedingReview=getQuestionsNeedingReview;
-ENTApp.quiz=ENTApp.quiz||{}; ENTApp.quiz.scanDuplicateQuestions=scanDuplicateQuestions;
-ENTApp.quiz=ENTApp.quiz||{}; ENTApp.quiz.adaptiveExamEngine=adaptiveExamEngine;
-ENTApp.quiz=ENTApp.quiz||{}; ENTApp.quiz.fullBoardExamSimulator=fullBoardExamSimulator;
-ENTApp.quiz=ENTApp.quiz||{}; ENTApp.quiz.smartQuestionSelector=smartQuestionSelector;
-ENTApp.quiz=ENTApp.quiz||{}; ENTApp.quiz.optimizeFor100kQuestions=optimizeFor100kQuestions;
-ENTApp.quiz=ENTApp.quiz||{}; ENTApp.quiz.iraqiBoardMockExam=iraqiBoardMockExam;
-ENTApp.quiz=ENTApp.quiz||{}; ENTApp.quiz.updateQuestionClassification=updateQuestionClassification;
-ENTApp.quiz=ENTApp.quiz||{}; ENTApp.quiz.renderExamSetup=renderExamSetup;
-ENTApp.quiz=ENTApp.quiz||{}; ENTApp.quiz.renderExamInProgress=renderExamInProgress;
-ENTApp.quiz=ENTApp.quiz||{}; ENTApp.quiz.renderExamResults=renderExamResults;
-ENTApp.quiz=ENTApp.quiz||{}; ENTApp.quiz.reviewExamResults=reviewExamResults;
-ENTApp.quiz=ENTApp.quiz||{}; ENTApp.quiz.renderQuestionList=renderQuestionList;
-ENTApp.quiz=ENTApp.quiz||{}; ENTApp.quiz.renderStudyQuestion=renderStudyQuestion;
-ENTApp.quiz=ENTApp.quiz||{}; ENTApp.quiz.submitExam=submitExam;
-ENTApp.quiz=ENTApp.quiz||{}; ENTApp.quiz.showAddQuestionModal=showAddQuestionModal;
-ENTApp.quiz=ENTApp.quiz||{}; ENTApp.quiz.showQuestionModal=showQuestionModal;
-ENTApp.quiz=ENTApp.quiz||{}; ENTApp.quiz.updateAvailableQuestionsInfo=updateAvailableQuestionsInfo;
-ENTApp.quiz=ENTApp.quiz||{}; ENTApp.quiz.populateExamChapters=populateExamChapters;
-ENTApp.quiz=ENTApp.quiz||{}; ENTApp.quiz.populateExamTopics=populateExamTopics;
-ENTApp.quiz=ENTApp.quiz||{}; ENTApp.quiz.updateExamCounters=updateExamCounters;
+window.ENTApp.quiz=window.ENTApp.quiz||{}; window.ENTApp.quiz.classifyQuestionAdvanced=classifyQuestionAdvanced;
+window.ENTApp.quiz=window.ENTApp.quiz||{}; window.ENTApp.quiz.getQuestionsNeedingReview=getQuestionsNeedingReview;
+window.ENTApp.quiz=window.ENTApp.quiz||{}; window.ENTApp.quiz.scanDuplicateQuestions=scanDuplicateQuestions;
+window.ENTApp.quiz=window.ENTApp.quiz||{}; window.ENTApp.quiz.adaptiveExamEngine=adaptiveExamEngine;
+window.ENTApp.quiz=window.ENTApp.quiz||{}; window.ENTApp.quiz.fullBoardExamSimulator=fullBoardExamSimulator;
+window.ENTApp.quiz=window.ENTApp.quiz||{}; window.ENTApp.quiz.smartQuestionSelector=smartQuestionSelector;
+window.ENTApp.quiz=window.ENTApp.quiz||{}; window.ENTApp.quiz.optimizeFor100kQuestions=optimizeFor100kQuestions;
+window.ENTApp.quiz=window.ENTApp.quiz||{}; window.ENTApp.quiz.iraqiBoardMockExam=iraqiBoardMockExam;
+window.ENTApp.quiz=window.ENTApp.quiz||{}; window.ENTApp.quiz.updateQuestionClassification=updateQuestionClassification;
+window.ENTApp.quiz=window.ENTApp.quiz||{}; window.ENTApp.quiz.renderExamSetup=renderExamSetup;
+window.ENTApp.quiz=window.ENTApp.quiz||{}; window.ENTApp.quiz.renderExamInProgress=renderExamInProgress;
+window.ENTApp.quiz=window.ENTApp.quiz||{}; window.ENTApp.quiz.renderExamResults=renderExamResults;
+window.ENTApp.quiz=window.ENTApp.quiz||{}; window.ENTApp.quiz.reviewExamResults=reviewExamResults;
+window.ENTApp.quiz=window.ENTApp.quiz||{}; window.ENTApp.quiz.renderQuestionList=renderQuestionList;
+window.ENTApp.quiz=window.ENTApp.quiz||{}; window.ENTApp.quiz.renderStudyQuestion=renderStudyQuestion;
+window.ENTApp.quiz=window.ENTApp.quiz||{}; window.ENTApp.quiz.submitExam=submitExam;
+window.ENTApp.quiz=window.ENTApp.quiz||{}; window.ENTApp.quiz.showAddQuestionModal=showAddQuestionModal;
+window.ENTApp.quiz=window.ENTApp.quiz||{}; window.ENTApp.quiz.showQuestionModal=showQuestionModal;
+window.ENTApp.quiz=window.ENTApp.quiz||{}; window.ENTApp.quiz.updateAvailableQuestionsInfo=updateAvailableQuestionsInfo;
+window.ENTApp.quiz=window.ENTApp.quiz||{}; window.ENTApp.quiz.populateExamChapters=populateExamChapters;
+window.ENTApp.quiz=window.ENTApp.quiz||{}; window.ENTApp.quiz.populateExamTopics=populateExamTopics;
+window.ENTApp.quiz=window.ENTApp.quiz||{}; window.ENTApp.quiz.updateExamCounters=updateExamCounters;
 // STEP41 auto-export
 (function(){
  if(!window.ENTApp)return;
  const names=['startQuiz','loadQuestions','renderQuestion','checkAnswer','nextQuestion','previousQuestion'];
- names.forEach(n=>{ if(typeof window[n]==='function'){ENTApp.modules.app[n]=window[n];}});
+ names.forEach(n=>{ if(typeof window[n]==='function'){window.ENTApp.modules.app[n]=window[n];}});
 })();
 
 
@@ -2401,26 +2408,26 @@ window.openReclassificationDialog=function(question){
  try{
    localStorage.setItem('reclassified_'+(question.id||question.questionText),JSON.stringify(question));
  }catch(e){}
- if(window.renderQuestion){try{renderQuestion();}catch(e){}}
+ if(window.renderQuestion){try{window.renderQuestion();}catch(e){}}
 };
 
 
 
 // STEP46 Modal enhancement scaffold
 window.ENTApp=window.ENTApp||{};
-ENTApp.modules=ENTApp.modules||{};
-ENTApp.modules.reclassification=ENTApp.modules.reclassification||{};
-ENTApp.modules.reclassification.version='step46';
-ENTApp.modules.reclassification.refreshFilters=function(){
- if(window.renderFilters) try{renderFilters();}catch(e){}
- if(window.refreshSearchIndex) try{refreshSearchIndex();}catch(e){}
+window.ENTApp.modules=window.ENTApp.modules||{};
+window.ENTApp.modules.reclassification=window.ENTApp.modules.reclassification||{};
+window.ENTApp.modules.reclassification.version='step46';
+window.ENTApp.modules.reclassification.refreshFilters=function(){
+ if(window.renderFilters) try{window.renderFilters();}catch(e){}
+ if(window.refreshSearchIndex) try{window.refreshSearchIndex();}catch(e){}
 };
 
 
 // STEP47 modal scaffold
 window.ENTApp=window.ENTApp||{};
-ENTApp.modules=ENTApp.modules||{};
-ENTApp.modules.reclassificationModal={
+window.ENTApp.modules=window.ENTApp.modules||{};
+window.ENTApp.modules.reclassificationModal={
  open:function(q){
    if(document.getElementById('reclassModal')){document.getElementById('reclassModal').style.display='block';}
  },
@@ -2431,27 +2438,27 @@ document.addEventListener('DOMContentLoaded',function(){
  var d=document.createElement('div');
  d.id='reclassModal';
  d.style.cssText='display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;';
- d.innerHTML='<div style="background:#fff;margin:10% auto;padding:16px;max-width:360px;border-radius:8px"><h3>Reclassification</h3><p>Modal scaffold ready.</p><button onclick="ENTApp.modules.reclassificationModal.close()">Close</button></div>';
+ d.innerHTML='<div style="background:#fff;margin:10% auto;padding:16px;max-width:360px;border-radius:8px"><h3>Reclassification</h3><p>Modal scaffold ready.</p><button onclick="window.ENTApp.modules.reclassificationModal.close()">Close</button></div>';
  document.body.appendChild(d);
 });
 
 
 // STEP48: linked selects scaffold
 window.ENTApp=window.ENTApp||{};
-ENTApp.modules=ENTApp.modules||{};
-ENTApp.modules.reclassificationModal=ENTApp.modules.reclassificationModal||{};
-ENTApp.modules.reclassificationModal.data={
+window.ENTApp.modules=window.ENTApp.modules||{};
+window.ENTApp.modules.reclassificationModal=window.ENTApp.modules.reclassificationModal||{};
+window.ENTApp.modules.reclassificationModal.data={
 subjects:{Rhinology:["Nose","Sinus"],Otology:["Ear"],Laryngology:["Larynx"]}
 };
-ENTApp.modules.reclassificationModal.populate=function(){
+window.ENTApp.modules.reclassificationModal.populate=function(){
  console.log("Populate cascading selects scaffold");
 };
 
 
 // STEP49 dynamic cascading selects
 window.ENTApp=window.ENTApp||{};
-ENTApp.modules=ENTApp.modules||{};
-ENTApp.modules.dynamicClassification={
+window.ENTApp.modules=window.ENTApp.modules||{};
+window.ENTApp.modules.dynamicClassification={
  refreshSelectors:function(subjectSel,chapterSel,data){
    if(!subjectSel||!chapterSel)return;
    const s=subjectSel.value;
@@ -2467,27 +2474,27 @@ ENTApp.modules.dynamicClassification={
 
 // STEP51 Real database implementation
 window.ENTApp=window.ENTApp||{};
-ENTApp.db=ENTApp.db||{};
-ENTApp.db.questions=ENTApp.db.questions||[];
+window.ENTApp.db=window.ENTApp.db||{};
+window.ENTApp.db.questions=window.ENTApp.db.questions||[];
 
-ENTApp.db.updateQuestion=function(id,data){
+window.ENTApp.db.updateQuestion=function(id,data){
   const q=this.questions.find(x=>String(x.id)===String(id));
   if(q){Object.assign(q,data);}
   localStorage.setItem('ent_questions',JSON.stringify(this.questions));
   return q;
 };
 
-ENTApp.db.loadQuestions=function(){
+window.ENTApp.db.loadQuestions=function(){
  try{
   const d=JSON.parse(localStorage.getItem('ent_questions')||'[]');
   if(Array.isArray(d)) this.questions=d;
  }catch(e){}
 };
 
-ENTApp.db.loadQuestions();
+window.ENTApp.db.loadQuestions();
 
 window.saveClassification=function(id,subject,chapter,topic,subtopic){
- const q=ENTApp.db.updateQuestion(id,{
+ const q=window.ENTApp.db.updateQuestion(id,{
    subject,chapter,topic,subtopic
  });
  document.dispatchEvent(new CustomEvent('classificationChanged',{detail:q}));
@@ -2499,8 +2506,8 @@ window.saveClassification=function(id,subject,chapter,topic,subtopic){
 (function(){
 window.addEventListener('searchIndexChanged',function(){
  try{
-   if(window.ENTApp&&ENTApp.renderQuestions){ENTApp.renderQuestions();}
-   if(window.ENTApp&&ENTApp.renderFilters){ENTApp.renderFilters();}
+   if(window.ENTApp&&window.ENTApp.renderQuestions){window.ENTApp.renderQuestions();}
+   if(window.ENTApp&&window.ENTApp.renderFilters){window.ENTApp.renderFilters();}
  }catch(e){console.warn(e);}
 });
 })();
@@ -2508,10 +2515,10 @@ window.addEventListener('searchIndexChanged',function(){
 
 // STEP56: connect reclassification save to database
 window.ENTApp=window.ENTApp||{};
-ENTApp.saveClassification=function(id,data){
+window.ENTApp.saveClassification=function(id,data){
  try{
-   if(ENTApp.db&&typeof ENTApp.db.updateQuestion==='function'){
-      ENTApp.db.updateQuestion(id,data);
+   if(window.ENTApp.db&&typeof window.ENTApp.db.updateQuestion==='function'){
+      window.ENTApp.db.updateQuestion(id,data);
    }
    document.dispatchEvent(new CustomEvent('classificationChanged',{detail:{id:id,data:data}}));
    document.dispatchEvent(new Event('questionsUpdated'));
@@ -2523,4 +2530,4 @@ ENTApp.saveClassification=function(id,data){
 };
 
 // step57 modal binding
-document.addEventListener('click',function(e){if(e.target&&(e.target.id==='saveClassificationBtn'||e.target.dataset.action==='save-classification')){try{if(window.ENTApp&&ENTApp.saveClassification){ENTApp.saveClassification(e.target.dataset.questionId||window.currentQuestionId,{});}}catch(err){console.error(err);}}});
+document.addEventListener('click',function(e){if(e.target&&(e.target.id==='saveClassificationBtn'||e.target.dataset.action==='save-classification')){try{if(window.ENTApp&&window.ENTApp.saveClassification){window.ENTApp.saveClassification(e.target.dataset.questionId||window.currentQuestionId,{});}}catch(err){console.error(err);}}});

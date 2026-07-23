@@ -15,6 +15,6 @@ if(window.ENTApp&&window.ENTApp.ui){window.ENTApp.ui.refresh();}
 
 // Step68 compatibility helpers
 window.ENTApp=window.ENTApp||{};
-ENTApp.ui=ENTApp.ui||window.ENTApp.ui;
-ENTApp.ui.safeQuery=function(sel){return document.querySelector(sel);};
-ENTApp.ui.safeQueryAll=function(sel){return Array.from(document.querySelectorAll(sel));};
+window.ENTApp.ui=window.ENTApp.ui||window.ENTApp.ui;
+window.ENTApp.ui.safeQuery=function(sel){return document.querySelector(sel);};
+window.ENTApp.ui.safeQueryAll=function(sel){return Array.from(document.querySelectorAll(sel));};
