@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0d6b6e">
+    <title>ENT Master Question Bank</title>
+
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Adam ENT">
+
+    <style>
+        :root {
+            --bg: #f0f4f5; --surface: #ffffff; --surface2: #e8f0f2;
+            --text: #1a2b2c; --text2: #4a5b5c;
+            --primary: #0d6b6e; --primary-light: #0f8a8e; --primary-dark: #094a4d;
+            --accent: #e8943a; --accent-light: #f5b870;
+            --success: #2d8a4e; --danger: #c0392b; --warning: #d4a017;
+            --border: #c8d6d8; --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --radius: 12px; --radius-sm: 8px; --transition: 0.2s ease;
+            --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            --nav-height: 64px; --max-width: 900px; --card-gap: 14px;
+        }
+
+        .dark-mode {
+            --bg: #121a1b; --surface: #1a2628; --surface2: #1e2c2e;
+            --text: #e0e8e9; --text2: #a0b4b6;
+            --primary: #1a9a9e; --primary-light: #22b8bd; --primary-dark: #0d6b6e;
+            --accent: #f0a550; --accent-light: #f5c080;
+            --success: #3cb064; --danger: #e05545; --warning: #e6b830;
+            --border: #2a3a3c; --shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font); background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh; -webkit-tap-highlight-color: transparent; transition: background var(--transition), color var(--transition); padding-bottom: calc(var(--nav-height) + 20px); user-select: none; }
+
+        .app-header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 12px 16px; position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow); }
+        .header-inner { max-width: var(--max-width); margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+        .logo { font-size: 1.3rem; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 8px; }
+        .btn-icon { width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--border); background: var(--surface); color: var(--text); cursor: pointer; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; transition: all var(--transition); }
+        .btn-icon:active { transform: scale(0.93); background: var(--surface2); }
+
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--surface); border-top: 1px solid var(--border); display: flex; z-index: 100; box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.06); height: var(--nav-height); }
+        .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; cursor: pointer; color: var(--text2); font-size: 0.7rem; font-weight: 500; border: none; background: none; position: relative; }
+        .nav-item.active { color: var(--primary); }
+        .nav-item.active::after { content: ''; position: absolute; top: 0; left: 20%; right: 20%; height: 3px; background: var(--primary); border-radius: 0 0 3px 3px; }
+
+        .main-content { max-width: var(--max-width); margin: 0 auto; padding: 16px; animation: fadeIn 0.25s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+        .card { background: var(--surface); border-radius: var(--radius); padding: 16px; margin-bottom: var(--card-gap); box-shadow: var(--shadow); border: 1px solid var(--border); }
+        .card-header { font-weight: 700; font-size: 1.1rem; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+        .stat-card { background: var(--surface2); border-radius: var(--radius-sm); padding: 14px 12px; text-align: center; border: 1px solid var(--border); }
+        .stat-value { font-size: 1.8rem; font-weight: 700; color: var(--primary); }
+        .stat-label { font-size: 0.75rem; color: var(--text2); text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 18px; border-radius: var(--radius-sm); border: none; cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: all var(--transition); font-family: var(--font); }
+        .btn:active { transform: scale(0.95); }
+        .btn-primary { background: var(--primary); color: #fff; }
+        .btn-accent { background: var(--accent); color: #fff; }
+        .btn-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); }
+        .btn-sm { padding: 6px 12px; font-size: 0.78rem; border-radius: 6px; }
+        .btn-block { width: 100%; justify-content: center; }
+        .btn-danger { background: var(--danger); color: #fff; }
+        .btn-success { background: var(--success); color: #fff; }
+        .btn-warning { background: var(--warning); color: #fff; }
+
+        input, select, textarea { width: 100%; padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border); font-family: var(--font); font-size: 0.9rem; background: var(--surface); color: var(--text); margin-bottom: 8px; }
+        label { font-weight: 600; font-size: 0.85rem; color: var(--text2); display: block; margin-bottom: 4px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+
+        .question-block { background: var(--surface); border-radius: var(--radius); padding: 20px; margin-bottom: 14px; border: 1px solid var(--border); }
+        .question-text { font-weight: 600; font-size: 1.05rem; margin-bottom: 14px; }
+        .option-btn { display: block; width: 100%; text-align: left; padding: 12px 16px; margin: 6px 0; border-radius: var(--radius-sm); border: 2px solid var(--border); background: var(--surface); cursor: pointer; font-size: 0.92rem; transition: all var(--transition); color: var(--text); }
+        .option-btn.selected { border-color: var(--primary); background: rgba(13, 107, 110, 0.08); font-weight: 600; }
+        .option-btn.correct { border-color: var(--success) !important; background: rgba(45, 138, 78, 0.12) !important; color: var(--success) !important; }
+        .option-btn.wrong { border-color: var(--danger) !important; background: rgba(192, 57, 43, 0.1) !important; color: var(--danger) !important; }
+        .explanation-box { margin-top: 12px; padding: 14px; background: var(--surface2); border-radius: var(--radius-sm); border-left: 4px solid var(--primary); font-size: 0.9rem; color: var(--text2); }
+        
+        .badge { display: inline-block; padding: 4px 10px; border-radius: 14px; font-size: 0.7rem; font-weight: 600; }
+        .badge-primary { background: rgba(13, 107, 110, 0.12); color: var(--primary); }
+        .badge-accent { background: rgba(232, 147, 58, 0.12); color: var(--accent); }
+        .badge-success { background: rgba(45, 138, 78, 0.12); color: var(--success); }
+        .badge-danger { background: rgba(192, 57, 43, 0.1); color: var(--danger); }
+        .badge-group { background: rgba(108, 92, 231, 0.12); color: #6c5ce7; }
+        .badge-warning { background: rgba(212, 160, 23, 0.12); color: var(--warning); }
+        
+        .timer-display { font-size: 2rem; font-weight: 700; text-align: center; color: var(--primary); }
+        .timer-warning { color: var(--warning) !important; }
+        .timer-danger { color: var(--danger) !important; }
+        .progress-bar { height: 6px; background: var(--surface2); border-radius: 3px; overflow: hidden; margin: 8px 0; }
+        .progress-fill { height: 100%; background: var(--primary); border-radius: 3px; transition: width 0.3s; }
+        .hidden { display: none !important; }
+        .text-center { text-align: center; }
+        .mt-2 { margin-top: 12px; }
+        .flex-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
+        .empty-state { text-align: center; padding: 40px 20px; color: var(--text2); }
+        .highlight { background: rgba(232, 147, 58, 0.3); padding: 0 2px; border-radius: 2px; }
+        .modal-field { margin-bottom: 12px; }
+
+        @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+    
+        .book-chip{display:inline-block;padding:6px 10px;margin:4px;border-radius:16px;background:#0d6b6e;color:#fff;font-size:12px}
+        .selection-panel{border:2px solid var(--primary);padding:10px;border-radius:12px;background:var(--surface2)}
+
+        .book-card{padding:10px;border:1px solid var(--border);border-radius:10px;margin:6px 0;cursor:pointer}
+        .book-card.active{background:rgba(13,107,110,.12);border-color:var(--primary)}
+
+        .book-card,.subject-card{padding:10px;border:1px solid var(--border);border-radius:10px;margin:4px;cursor:pointer;display:inline-block}
+        .book-card.selected,.subject-card.selected{background:var(--primary);color:white}
+        .card-grid{display:flex;flex-wrap:wrap;gap:6px;max-height:250px;overflow:auto}
+
+        .book-card{padding:10px;border:1px solid var(--border);border-radius:10px;margin:4px;cursor:pointer;display:inline-block}
+        .book-card.selected{background:var(--primary);color:white}
+        .card-grid{display:flex;flex-wrap:wrap;gap:6px;max-height:220px;overflow:auto}
+
+        .tree-node{padding:8px;border:1px solid var(--border);margin:4px;border-radius:8px;cursor:pointer}
+        .review-badge{background:#c0392b;color:#fff;padding:2px 8px;border-radius:10px;font-size:11px}
+
+        .hierarchy-panel{padding:12px;border:1px solid var(--border);border-radius:12px;margin:8px 0}
+        .drag-item{padding:8px;margin:4px;border:1px dashed var(--primary);border-radius:8px}
+
+        .duplicate-panel{padding:10px;border:1px solid var(--border);border-radius:10px;margin:6px 0}
+        .analytics-card{padding:10px;border-left:4px solid var(--primary);margin:6px 0}
+
+        .dashboard-widget{padding:12px;border:1px solid var(--border);border-radius:12px;margin:8px 0;background:var(--surface2)}
+        .heatmap-cell{display:inline-block;padding:8px;margin:3px;border-radius:8px;background:rgba(13,107,110,.15)}
+        .recommendation-card{padding:10px;border-left:4px solid #e8943a;margin:6px 0}
+
+        .chart-bar{height:24px;margin:4px 0;background:rgba(13,107,110,.15);border-radius:8px;padding:4px}
+        .drag-drop-zone{min-height:60px;border:2px dashed var(--primary);padding:10px;border-radius:10px}
+        .readiness-card{padding:12px;border:1px solid var(--border);border-radius:12px;margin:8px 0}
+
+        .canvas-chart{width:100%;height:240px;border:1px solid var(--border);border-radius:12px}
+        .planner-card{padding:12px;border:1px solid var(--border);border-radius:12px;margin:8px 0}
+
+        .ai-card{padding:12px;border:1px solid var(--border);border-radius:12px;margin:8px 0}
+        .forecast-good{color:var(--success);font-weight:bold}
+
+        .floating-reclassify-btn{position:fixed;right:16px;bottom:90px;z-index:99}
+    </style>
+</head>
+<body>
+
+    <header class="app-header">
+        <div class="header-inner">
+            <div class="logo"><span>🦻</span> Adam ENT Master Bank</div>
+            <div>
+                <button class="btn-icon" id="btnDarkMode">🌓</button>
+                <button class="btn-icon" id="btnSearch">🔍</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content" id="mainContent"></main>
+
+    <nav class="bottom-nav" id="bottomNav">
+        <button class="nav-item active" data-view="dashboard"><span>📊</span>Dashboard</button>
+        <button class="nav-item" data-view="study"><span>📖</span>Study</button>
+        <button class="nav-item" data-view="exam"><span>📝</span>Exam</button>
+        <button class="nav-item" data-view="questions"><span>📋</span>Questions</button>
+        <button class="nav-item" data-view="import"><span>📥</span>Import</button>
+    </nav>
+
+    <div id="modalOverlay" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;display:flex;align-items:flex-end;justify-content:center;">
+        <div id="modalContent" style="background:var(--surface);border-radius:20px 20px 0 0;width:100%;max-width:900px;max-height:85vh;overflow-y:auto;padding:20px;"></div>
+    </div>
+    <div id="toastContainer" style="position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:300;"></div>
+
+    <script src="app.js" defer"></script>
+
+    <!-- PWA: register service worker for offline use + installability -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js')
+                    .then(reg => console.log('Service worker registered:', reg.scope))
+                    .catch(err => console.warn('Service worker registration failed:', err));
+            });
+        }
+    
+async function populateDeleteBookDropdown(){
+ const sel=document.getElementById('deleteGroupName');
+ if(!sel) return;
+ const groups=await db.getAllGroups();
+ sel.innerHTML='<option value="">Select Book</option>'+groups.map(g=>`<option value="${g}">${g}</option>`).join('');
+}
+setTimeout(populateDeleteBookDropdown,300);
+
+
+document.addEventListener('click', async (e)=>{
+ if(e.target.id==='btnExamFromMistakes'){
+   const perf=await db.getPerformance();
+   const latest={}; perf.forEach(x=>latest[x.questionId]=x.correct);
+   const wrongIds=Object.keys(latest).filter(k=>latest[k]===false).map(Number);
+   const qs=(await db.getAllQuestions()).filter(q=>wrongIds.includes(q.id));
+   AppState._examSaved=false;
+   AppState.examQuestions=qs;
+   AppState.examAnswers={currentIndex:0};
+   AppState.examInProgress=true;
+   AppState.examStartTime=Date.now();
+   renderViewSafely('exam');
+ }
+ if(e.target.classList.contains('add-hy')){
+   await db.toggleHighYield(Number(e.target.dataset.qid));
+   showToast('Added to High Yield','success');
+   renderViewSafely('mistakes');
+ }
+ if(e.target.classList.contains('retry-question')){
+   const qid=Number(e.target.dataset.qid);
+   const q=await db.getQuestion(qid);
+   if(!q) return;
+   AppState.studyQuestions=[q];
+   AppState.studyIndex=0;
+   AppState.studyAnswers={};
+   AppState.studyRevealed={};
+   navigateTo('study');
+   setTimeout(()=>renderStudyQuestion(),100);
+ }
+ if(e.target.classList.contains('remove-hy')){
+   const qid=Number(e.target.dataset.qid);
+   await db.toggleHighYield(qid);
+   showToast('Removed from High Yield', 'success');
+   renderViewSafely('highyield');
+ }
+});
+
+
+function updateAvailableQuestionsInfo(){
+ try{
+   const info=document.getElementById('availableQuestionsInfo');
+   if(!info || !window.db) return;
+   db.getAllQuestions().then(qs=>{
+      const subjSel=document.getElementById('examSubject');
+      const grpSel=document.getElementById('examBook');
+      let filtered=[...qs];
+
+      const subjects=subjSel?[...subjSel.selectedOptions].map(x=>x.value).filter(v=>v!=='all'):[];
+      const groups=grpSel?[...grpSel.selectedOptions].map(x=>x.value).filter(v=>v!=='all'):[];
+
+      if(subjects.length) filtered=filtered.filter(q=>subjects.includes(q.subject));
+      if(groups.length) filtered=filtered.filter(q=>groups.includes(q.group));
+
+      info.textContent='Available Questions: '+filtered.length;
+   });
+ }catch(e){}
+}
+document.addEventListener('change',e=>{
+ if(e.target && (e.target.id==='examSubject' || e.target.id==='examBook')){
+   updateAvailableQuestionsInfo();
+ }
+});
+
+
+function populateExamChapters(){
+ const subj=document.getElementById('examSubject');
+ const chap=document.getElementById('examChapter');
+ if(!subj||!chap) return;
+ const selected=[...subj.selectedOptions].map(o=>o.value).filter(v=>v!=='all');
+ let chapters=[];
+ if(selected.length===0){ chapters=ALL_CHAPTERS; }
+ else{
+   selected.forEach(s=>{ if(ENT_DATA[s]) chapters.push(...ENT_DATA[s]); });
+ }
+ chap.innerHTML='<option value="all">All</option>'+
+   [...new Set(chapters)].sort().map(c=>`<option value="${c}">${c}</option>`).join('');
+}
+
+document.addEventListener('change',function(e){
+ if(e.target && e.target.id==='examSubject'){
+   populateExamChapters();
+   if(typeof updateAvailableQuestionsInfo==='function') updateAvailableQuestionsInfo();
+ }
+});
+
+document.addEventListener('change',function(e){
+ if(e.target && (e.target.id==='examChapter' || e.target.id==='examTopic')){
+   if(typeof updateAvailableQuestionsInfo==='function') updateAvailableQuestionsInfo();
+ }
+});
+
+// Removed btnSelectAllSubjects listener
+
+
+async function populateExamTopics(){
+ const chapter=document.getElementById('examChapter');
+ const topic=document.getElementById('examTopic');
+ if(!chapter || !topic) return;
+ const qs=await db.getAllQuestions();
+ let filtered=qs;
+ if(chapter.value!=='all'){
+   filtered=filtered.filter(q=>(q.chapter||'General')===chapter.value);
+ }
+ const topics=[...new Set(filtered.map(q=>q.topic).filter(Boolean))].sort();
+ topic.innerHTML='<option value="all">All</option>'+topics.map(t=>`<option value="${t}">${t}</option>`).join('');
+}
+
+async function updateExamCounters(){
+ const info=document.getElementById('availableQuestionsInfo');
+ if(!info) return;
+ const qs=await db.getAllQuestions();
+ info.innerHTML='Total Questions: '+qs.length;
+}
+
+document.addEventListener('change',async function(e){
+ if(e.target && e.target.id==='examChapter'){
+   await populateExamTopics();
+ }
+});
+
+document.addEventListener('DOMContentLoaded',function(){
+ setTimeout(()=>{
+   if(typeof populateExamChapters==='function') populateExamChapters();
+   if(typeof updateExamCounters==='function') updateExamCounters();
+ },500);
+});
+
+</script>
+
+<script>
+window.entStats = JSON.parse(localStorage.getItem('entStats')||'{"correct":0,"wrong":0,"highYield":0}');
+window.saveEntStats=function(){localStorage.setItem('entStats',JSON.stringify(window.entStats));};
+
+/* Delete one book handler */
+
+const delGroupBtn = document.getElementById('btnDeleteGroup');
+if(delGroupBtn){
+  delGroupBtn.addEventListener('click', async () => {
+    const groupName = (document.getElementById('deleteGroupName')?.value || '').trim();
+    if(!groupName){ alert('Enter book/group name'); return; }
+    if(!confirm(`Delete all questions from "${groupName}" only?`)) return;
+    const deleted = await db.deleteQuestionsByGroup(groupName);
+    showToast(`${deleted} questions deleted from ${groupName}`, 'success');
+    renderViewSafely('import');
+  });
+}
+
+
+async function populateDeleteBookDropdown(){
+ const sel=document.getElementById('deleteGroupName');
+ if(!sel) return;
+ const groups=await db.getAllGroups();
+ sel.innerHTML='<option value="">Select Book</option>'+groups.map(g=>`<option value="${g}">${g}</option>`).join('');
+}
+setTimeout(populateDeleteBookDropdown,300);
+
+
+document.addEventListener('click', async (e)=>{
+ if(e.target.id==='btnExamFromMistakes'){
+   const perf=await db.getPerformance();
+   const latest={}; perf.forEach(x=>latest[x.questionId]=x.correct);
+   const wrongIds=Object.keys(latest).filter(k=>latest[k]===false).map(Number);
+   const qs=(await db.getAllQuestions()).filter(q=>wrongIds.includes(q.id));
+   AppState._examSaved=false;
+   AppState.examQuestions=qs;
+   AppState.examAnswers={currentIndex:0};
+   AppState.examInProgress=true;
+   AppState.examStartTime=Date.now();
+   renderViewSafely('exam');
+ }
+ if(e.target.classList.contains('add-hy')){
+   await db.toggleHighYield(Number(e.target.dataset.qid));
+   showToast('Added to High Yield','success');
+   renderViewSafely('mistakes');
+ }
+ if(e.target.classList.contains('retry-question')){
+   const qid=Number(e.target.dataset.qid);
+   const q=await db.getQuestion(qid);
+   if(!q) return;
+   AppState.studyQuestions=[q];
+   AppState.studyIndex=0;
+   AppState.studyAnswers={};
+   AppState.studyRevealed={};
+   navigateTo('study');
+   setTimeout(()=>renderStudyQuestion(),100);
+ }
+ if(e.target.classList.contains('remove-hy')){
+   const qid=Number(e.target.dataset.qid);
+   await db.toggleHighYield(qid);
+   showToast('Removed from High Yield', 'success');
+   renderViewSafely('highyield');
+ }
+});
+
+
+function updateAvailableQuestionsInfo(){
+ try{
+   const info=document.getElementById('availableQuestionsInfo');
+   if(!info || !window.db) return;
+   db.getAllQuestions().then(qs=>{
+      const subjSel=document.getElementById('examSubject');
+      const grpSel=document.getElementById('examBook');
+      let filtered=[...qs];
+
+      const subjects=subjSel?[...subjSel.selectedOptions].map(x=>x.value).filter(v=>v!=='all'):[];
+      const groups=grpSel?[...grpSel.selectedOptions].map(x=>x.value).filter(v=>v!=='all'):[];
+
+      if(subjects.length) filtered=filtered.filter(q=>subjects.includes(q.subject));
+      if(groups.length) filtered=filtered.filter(q=>groups.includes(q.group));
+
+      info.textContent='Available Questions: '+filtered.length;
+   });
+ }catch(e){}
+}
+document.addEventListener('change',e=>{
+ if(e.target && (e.target.id==='examSubject' || e.target.id==='examBook')){
+   updateAvailableQuestionsInfo();
+ }
+});
+
+
+function populateExamChapters(){
+ const subj=document.getElementById('examSubject');
+ const chap=document.getElementById('examChapter');
+ if(!subj||!chap) return;
+ const selected=[...subj.selectedOptions].map(o=>o.value).filter(v=>v!=='all');
+ let chapters=[];
+ if(selected.length===0){ chapters=ALL_CHAPTERS; }
+ else{
+   selected.forEach(s=>{ if(ENT_DATA[s]) chapters.push(...ENT_DATA[s]); });
+ }
+ chap.innerHTML='<option value="all">All</option>'+
+   [...new Set(chapters)].sort().map(c=>`<option value="${c}">${c}</option>`).join('');
+}
+
+document.addEventListener('change',function(e){
+ if(e.target && e.target.id==='examSubject'){
+   populateExamChapters();
+   if(typeof updateAvailableQuestionsInfo==='function') updateAvailableQuestionsInfo();
+ }
+});
+
+document.addEventListener('change',function(e){
+ if(e.target && (e.target.id==='examChapter' || e.target.id==='examTopic')){
+   if(typeof updateAvailableQuestionsInfo==='function') updateAvailableQuestionsInfo();
+ }
+});
+
+// Removed btnSelectAllSubjects listener
+
+
+async function populateExamTopics(){
+ const chapter=document.getElementById('examChapter');
+ const topic=document.getElementById('examTopic');
+ if(!chapter || !topic) return;
+ const qs=await db.getAllQuestions();
+ let filtered=qs;
+ if(chapter.value!=='all'){
+   filtered=filtered.filter(q=>(q.chapter||'General')===chapter.value);
+ }
+ const topics=[...new Set(filtered.map(q=>q.topic).filter(Boolean))].sort();
+ topic.innerHTML='<option value="all">All</option>'+topics.map(t=>`<option value="${t}">${t}</option>`).join('');
+}
+
+async function updateExamCounters(){
+ const info=document.getElementById('availableQuestionsInfo');
+ if(!info) return;
+ const qs=await db.getAllQuestions();
+ info.innerHTML='Total Questions: '+qs.length;
+}
+
+document.addEventListener('change',async function(e){
+ if(e.target && e.target.id==='examChapter'){
+   await populateExamTopics();
+ }
+});
+
+document.addEventListener('DOMContentLoaded',function(){
+ setTimeout(()=>{
+   if(typeof populateExamChapters==='function') populateExamChapters();
+   if(typeof updateExamCounters==='function') updateExamCounters();
+ },500);
+});
+
+</script>
+
+
+<script>
+// STEP 20 AUTO BACKUP
+window.addEventListener('beforeunload', async ()=>{
+ try{
+   if(window.db && db.exportAllData){
+      const data = await db.exportAllData();
+      localStorage.setItem('ENT_AUTO_BACKUP', JSON.stringify(data));
+   }
+ }catch(e){}
+});
+
+async function restoreAutoBackup(){
+ try{
+   const raw = localStorage.getItem('ENT_AUTO_BACKUP');
+   if(!raw) return false;
+   const data = JSON.parse(raw);
+   if(window.db && confirm('Auto-backup found. Restore it?')){
+      await db.clearAndRestore(data);
+      return true;
+   }
+ }catch(e){}
+ return false;
+}
+window.addEventListener('load', ()=>setTimeout(restoreAutoBackup,1000));
+</script>
+
+<script>
+function validateImportedQuestionsStrict(arr){
+ return Array.isArray(arr) && arr.length>0 &&
+ arr.every(q=>q.questionText && q.correctAnswer);
+}
+</script>
+
+<script>
+function saveExamProgressAuto(state){
+ try{localStorage.setItem('ent_exam_progress',JSON.stringify(state));}catch(e){}
+}
+function loadExamProgressAuto(){
+ try{return JSON.parse(localStorage.getItem('ent_exam_progress')||'null');}
+ catch(e){return null;}
+}
+function clearExamProgressAuto(){
+ try{localStorage.removeItem('ent_exam_progress');}catch(e){}
+}
+</script>
+
+
+<script>
+function persistExamSession(currentIndex, answers){
+ localStorage.setItem('ent_exam_session',JSON.stringify({
+   currentIndex,
+   answers,
+   savedAt:new Date().toISOString()
+ }));
+}
+
+function restoreExamSession(){
+ try{
+   return JSON.parse(localStorage.getItem('ent_exam_session')||'null');
+ }catch(e){ return null; }
+}
+
+function clearExamSession(){
+ localStorage.removeItem('ent_exam_session');
+}
+</script>
+
+
+<script>
+/* ENT_AUTOSAVE_HOOK */
+document.addEventListener('change',function(e){
+ try{
+   const t=e.target;
+   if(t && (t.type==='radio' || t.type==='checkbox')){
+      localStorage.setItem('ent_last_interaction',new Date().toISOString());
+   }
+ }catch(err){}
+});
+</script>
+
+
+<script>
+/* ENT_EXAM_BRIDGE_V1 */
+window.addEventListener('load',function(){
+ try{
+   const saved = localStorage.getItem('ent_exam_session');
+   if(saved){ window.entSavedSession = JSON.parse(saved); }
+ }catch(e){}
+});
+
+document.addEventListener('click',function(){
+ try{
+   const state={
+     ts:Date.now(),
+     url:location.hash||location.pathname
+   };
+   localStorage.setItem('ent_runtime_state',JSON.stringify(state));
+ }catch(e){}
+});
+
+function entSaveAnswer(qid,answer){
+ try{
+   const data=JSON.parse(localStorage.getItem('ent_answers')||'{}');
+   data[qid]=answer;
+   localStorage.setItem('ent_answers',JSON.stringify(data));
+ }catch(e){}
+}
+</script>
+
+
+<script>
+/* REAL_EXAM_INTEGRATION_V1 */
+(function(){
+const originalSubmitExam = window.submitExam;
+if(originalSubmitExam){
+ window.submitExam=function(){
+   try{
+      const results=(window.AppState&&AppState.lastExamResults)?AppState.lastExamResults:[];
+      results.forEach(r=>{
+        if(r && r.correct===false){
+          let wrong=JSON.parse(localStorage.getItem('wrongQuestions')||'[]');
+          if(!wrong.includes(r.id)) wrong.push(r.id);
+          localStorage.setItem('wrongQuestions',JSON.stringify(wrong));
+        }
+      });
+      if(window.AppState){
+        const score=results.filter(r=>r.correct).length;
+        if(typeof saveExamResult==='function'){
+           saveExamResult(score,results.length);
+        }
+      }
+      if(typeof clearExamProgressAuto==='function') clearExamProgressAuto();
+      if(typeof clearExamSession==='function') clearExamSession();
+   }catch(e){console.error(e);}
+   return originalSubmitExam.apply(this,arguments);
+ }
+}
+document.addEventListener('click',function(e){
+ const opt=e.target.closest('[data-option]');
+ if(!opt || !window.AppState) return;
+ try{
+   const idx=AppState.examAnswers.currentIndex||0;
+   const q=AppState.examQuestions[idx];
+   if(q){
+      entSaveAnswer(q.id,opt.dataset.option);
+      saveExamProgressAuto({
+         currentIndex:idx,
+         answers:AppState.examAnswers
+      });
+   }
+ }catch(err){}
+});
+})();
+</script>
+
+
+<script>
+/* ENT_AUTO_RESTORE_V2 */
+window.addEventListener('load',()=>{
+ try{
+   const saved=JSON.parse(localStorage.getItem('ent_exam_session')||'null');
+   if(saved){
+      window.entRecoveredSession=saved;
+      console.log('Recovered exam session',saved);
+   }
+ }catch(e){}
+});
+
+function entMarkWrongQuestion(questionId){
+ try{
+   let q=JSON.parse(localStorage.getItem('wrongQuestions')||'[]');
+   if(!q.includes(questionId)){
+      q.push(questionId);
+      localStorage.setItem('wrongQuestions',JSON.stringify(q));
+   }
+ }catch(e){}
+}
+
+function entAddBookmark(questionId){
+ try{
+   let q=JSON.parse(localStorage.getItem('bookmarks')||'[]');
+   if(!q.includes(questionId)){
+      q.push(questionId);
+      localStorage.setItem('bookmarks',JSON.stringify(q));
+   }
+ }catch(e){}
+}
+</script>
+
+
+<script>
+/* ENT_REVIEW_CENTER_V3 */
+function entShowWrongCount(){
+ const arr=JSON.parse(localStorage.getItem('wrongQuestions')||'[]');
+ document.getElementById('entReviewOutput').innerHTML='Wrong Questions: '+arr.length;
+}
+function entShowBookmarkCount(){
+ const arr=JSON.parse(localStorage.getItem('bookmarks')||'[]');
+ document.getElementById('entReviewOutput').innerHTML='Bookmarks: '+arr.length;
+}
+window.addEventListener('load',()=>{
+ try{
+   const s=JSON.parse(localStorage.getItem('ent_exam_session')||'null');
+   if(s){
+     console.log('Session available for restore');
+   }
+ }catch(e){}
+});
+</script>
+
+
+<div id="entResumePanel" style="display:none;position:fixed;top:20px;left:20px;right:20px;background:white;border:2px solid #444;padding:15px;z-index:9999">
+<h3>Resume Previous Exam</h3>
+<p>A saved exam session was found.</p>
+<button onclick="entResumeExam()">Resume</button>
+<button onclick="entDiscardExam()">Start New Exam</button>
+</div>
+<script>
+/* ENT_RESUME_DIALOG_V4 */
+function entResumeExam(){
+ document.getElementById('entResumePanel').style.display='none';
+ window.entResumeRequested=true;
+}
+function entDiscardExam(){
+ localStorage.removeItem('ent_exam_session');
+ document.getElementById('entResumePanel').style.display='none';
+}
+window.addEventListener('load',function(){
+ try{
+   const s=localStorage.getItem('ent_exam_session');
+   if(s){
+      const p=document.getElementById('entResumePanel');
+      if(p) p.style.display='block';
+   }
+ }catch(e){}
+});
+</script>
+
+
+<script>
+/* ENT_LAST_QUESTION_RESTORE_V5 */
+function entSaveCurrentQuestion(questionIndex){
+ try{
+   localStorage.setItem('ent_last_question', String(questionIndex));
+ }catch(e){}
+}
+
+function entGetLastQuestion(){
+ try{
+   return parseInt(localStorage.getItem('ent_last_question')||'0',10);
+ }catch(e){ return 0; }
+}
+
+window.addEventListener('load',function(){
+ try{
+   const lastQ = entGetLastQuestion();
+   window.entLastQuestionIndex = lastQ;
+   console.log('Last Question Index:', lastQ);
+ }catch(e){}
+});
+</script>
+
+<div id="entRestoreInfo" style="margin:8px;padding:8px;border:1px dashed #888">
+Last question restore system enabled.
+</div>
+
+
+<script>
+/* ENT_GOOGLEPLAY_CHECK_V6 */
+function entAppReadiness(){
+ return {
+   manifest: !!document.querySelector('link[rel="manifest"]'),
+   privacy: !!document.querySelector('a[href*="privacy"]'),
+   serviceWorker: ('serviceWorker' in navigator),
+   version: localStorage.getItem('appVersion') || '1.0.0'
+ };
+}
+
+function entShowReadiness(){
+ const r=entAppReadiness();
+ const el=document.getElementById('entReadinessOutput');
+ if(el){
+   el.innerHTML='Manifest: '+r.manifest+'<br>Privacy: '+r.privacy+'<br>Service Worker: '+r.serviceWorker+'<br>Version: '+r.version;
+ }
+}
+</script>
+<script>
+/* ENT_FINAL_REVIEW_V7 */
+function entFinalAudit(){
+ const report=[];
+ report.push("Privacy Policy: " + (!!document.querySelector('a[href*="privacy"]')));
+ report.push("Manifest: " + (!!document.querySelector('link[rel="manifest"]')));
+ report.push("Service Worker: " + ('serviceWorker' in navigator));
+ report.push("Bookmarks: " + JSON.parse(localStorage.getItem('bookmarks')||'[]').length);
+ report.push("Wrong Questions: " + JSON.parse(localStorage.getItem('wrongQuestions')||'[]').length);
+ const el=document.getElementById('entAuditOutput');
+ if(el) el.innerHTML=report.join('<br>');
+}
+</script>
+<script src="ui.js" defer"></script>
+<script src="database.js" defer"></script>
+
+<script src="search.js" defer"></script>
+<script src="settings.js" defer"></script>
+<script src="quiz.js" defer"></script>
+<style>.reclass-btn{position:absolute;top:8px;right:8px;z-index:99;padding:4px 8px;font-size:11px}</style>
+<script>
+document.addEventListener('click',e=>{
+ if(e.target.classList.contains('reclass-btn')){
+   const v=prompt('New classification');
+   if(v!==null){alert('Classification updated: '+v);}
+ }
+});
+document.addEventListener('DOMContentLoaded',()=>{
+ document.querySelectorAll('.question-card,.question,.card').forEach(q=>{
+  if(q.querySelector('.reclass-btn'))return;
+  q.style.position='relative';
+  let b=document.createElement('button');
+  b.className='reclass-btn';
+  b.textContent='Reclassification';
+  q.appendChild(b);
+ });
+});
+</script>
+<script>
+document.addEventListener('click',async(e)=>{
+ const btn=e.target.closest('.reclass-btn');
+ if(!btn)return;
+ const card=btn.closest('.question-card,.question,.card');
+ if(!card)return;
+ const id=card.dataset.id||card.getAttribute('data-id');
+ const cur=card.dataset.subject||'';
+ const val=prompt('New classification',cur);
+ if(!val)return;
+ try{
+   if(window.db&&db.updateQuestion){
+      await db.updateQuestion(Number(id),{subject:val});
+   }
+ }catch(err){}
+ card.dataset.subject=val;
+ let badge=card.querySelector('.subject-badge');
+ if(badge) badge.textContent=val;
+ localStorage.setItem('reclass_'+id,val);
+ alert('Saved');
+});
+</script>
+
+</body>
+</html>

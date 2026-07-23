@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>About Adam ENT</title></head>
+<body style="font-family:Arial,sans-serif;max-width:800px;margin:auto;padding:20px">
+<h1>Adam ENT Master Bank</h1>
+<p>Version: 1.0.0</p>
+<p>Developer: Adam ENT Team</p>
+<p>Offline ENT Question Bank and Exam Preparation Platform.</p>
+<p>Contact: your-email@example.com</p>
+<style>.reclass-btn{position:absolute;top:8px;right:8px;z-index:99;padding:4px 8px;font-size:11px}</style>
+<script>
+document.addEventListener('click',e=>{
+ if(e.target.classList.contains('reclass-btn')){
+   const v=prompt('New classification');
+   if(v!==null){alert('Classification updated: '+v);}
+ }
+});
+document.addEventListener('DOMContentLoaded',()=>{
+ document.querySelectorAll('.question-card,.question,.card').forEach(q=>{
+  if(q.querySelector('.reclass-btn'))return;
+  q.style.position='relative';
+  let b=document.createElement('button');
+  b.className='reclass-btn';
+  b.textContent='Reclassification';
+  q.appendChild(b);
+ });
+});
+</script></body></html>

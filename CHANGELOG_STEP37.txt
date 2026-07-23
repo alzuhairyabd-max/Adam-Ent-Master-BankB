@@ -1,0 +1,3 @@
+STEP37
+- Added changelog placeholder.
+- Ready for real module migration.

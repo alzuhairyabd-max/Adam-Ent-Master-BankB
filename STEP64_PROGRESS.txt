@@ -1,0 +1,3 @@
+Step 64
+Prepared extraction of UI functions into ui.js.
+Next step will move rendering/event handlers into a dedicated module.

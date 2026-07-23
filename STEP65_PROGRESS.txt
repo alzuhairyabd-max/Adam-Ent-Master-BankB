@@ -1,0 +1,3 @@
+Step 65
+Prepared ui.js extraction scaffolding.
+Planned next: migrate rendering and event handlers into ui.js.
