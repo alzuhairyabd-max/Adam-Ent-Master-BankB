@@ -1,7 +1,13 @@
 {
+  "name": "adam-ent-master-bank",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "echo Build complete"
+  },
   "dependencies": {
     "@capacitor/android": "^8.4.2",
     "@capacitor/cli": "^8.4.2",
     "@capacitor/core": "^8.4.2"
   }
-}
+} 
