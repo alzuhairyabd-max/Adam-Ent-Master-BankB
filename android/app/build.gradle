@@ -3,6 +3,10 @@ apply plugin: 'com.android.application'
 android {
     namespace = "com.alzuhairyabd.adamentmasterbank"
     compileSdk = rootProject.ext.compileSdkVersion
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
     defaultConfig {
         applicationId "com.alzuhairyabd.adamentmasterbank"
         minSdkVersion rootProject.ext.minSdkVersion
